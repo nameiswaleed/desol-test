@@ -1,4 +1,4 @@
-const { Users } = require('../database/models');
+const { Users } = require("../database/models");
 
 /**
  * Adds a user to the database.
@@ -15,7 +15,7 @@ const addUserToDB = async (user) => {
     return await newUser.save();
   } catch (err) {
     // Log any errors that occur during the process
-    console.log('[ERR IN ADD USER SERVICE]', err);
+    console.log("[ERR IN ADD USER SERVICE]", err);
   }
 };
 /**
@@ -26,11 +26,11 @@ const addUserToDB = async (user) => {
 const getSingleUser = async (id) => {
   try {
     // Find user by ID in the Users collection
-    const user = await Users.findById(id);
+    const user = await Users.findById(id, { password: 0 });
     return user;
   } catch (err) {
     // Log any errors that occur during the retrieval process
-    console.log('[ERR IN GET SINGLE USER SERVICE]', err);
+    console.log("[ERR IN GET SINGLE USER SERVICE]", err);
   }
 };
 /**
@@ -40,11 +40,11 @@ const getSingleUser = async (id) => {
 const getAllUsers = async () => {
   try {
     // Find all users in the database and store them in the 'users' variable
-    const users = await Users.find();
+    const users = await Users.find({}, { password: 0 });
     return users;
   } catch (error) {
     // Log any errors that occur during the retrieval of users
-    console.log('[ERR IN GET ALL USERS SERVICE]', error);
+    console.log("[ERR IN GET ALL USERS SERVICE]", error);
   }
 };
 /**
@@ -55,10 +55,10 @@ const getAllUsers = async () => {
  */
 const getUserByEmail = async (email) => {
   try {
-    const user = await Users.findOne({ email });
+    const user = await Users.findOne({ email }, { password: 0 });
     return user;
   } catch (error) {
-    console.log('[ERR IN GET USER BY EMAIL SERVICE]', error);
+    console.log("[ERR IN GET USER BY EMAIL SERVICE]", error);
     throw error;
   }
 };
@@ -66,10 +66,10 @@ const getUserByEmail = async (email) => {
 const deleteUserById = async (id) => {
   try {
     const user = await Users.findByIdAndDelete(id);
-    if (!user) throw new Error('User not found');
+    if (!user) throw new Error("User not found");
     return user;
   } catch (error) {
-    console.log('[ERR IN GET USER BY EMAIL SERVICE]', error);
+    console.log("[ERR IN GET USER BY EMAIL SERVICE]", error);
     throw error;
   }
 };
