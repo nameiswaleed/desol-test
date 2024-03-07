@@ -4,6 +4,7 @@ const db = require("./database");
 const { authRouter, carRouter } = require("./routes");
 const port = config.port;
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const morgan = require("morgan");
 

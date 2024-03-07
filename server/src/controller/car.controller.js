@@ -2,16 +2,21 @@ const { Car } = require("../database/models");
 const { validateCar } = require("../config/types");
 const createCar = async (req, res) => {
   try {
+    console.log(req.body);
     const { error } = validateCar(req.body);
     if (error) {
-      return res.status(400).send(error.details[0].message);
+      return res.status(400).send(error.details);
     }
-    if (!req.files) {
+    if (!req.files || req.files.length === 0) {
       return res.status(400).json({
         message: "Images not found",
       });
     }
-    const uploadedImages = req.files.map((file) => file.path);
+    if (req.files && req.files.length > 0) {
+      // Extract URLs from Cloudinary response and store them in the array
+      uploadedImages = req.files.map((file) => file.path);
+    }
+    console.log("Files uploaded:", req.files);
     // Create /a new car entry
     const car = await Car.create({
       user: req.user._id,
@@ -34,7 +39,9 @@ const createCar = async (req, res) => {
 
 const getAllCars = async (req, res) => {
   try {
-    const cars = await Car.find().populate("user", { password: 0 });
+    console.log(req.user)
+    const cars = await Car.find({user: req.user._id}).populate("user", { name: 1, email: 1 });
+    // console.log(cars);
     res.status(200).json(cars);
   } catch (error) {
     console.error(error);
