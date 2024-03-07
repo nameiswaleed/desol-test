@@ -2,7 +2,7 @@ import React from "react";
 
 const NoCarsMessage = ({ onClickAddCars }) => {
   return (
-    <div className=" container flex flex-col items-center justify-center h-screen">
+    <div className=" container flex flex-col items-center justify-center">
       <p className="text-xl mb-4">There are no cars to show.</p>
       <button
         onClick={onClickAddCars}

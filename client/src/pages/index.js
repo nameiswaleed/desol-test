@@ -23,11 +23,14 @@ export default function Home() {
     validationSchema,
     onSubmit: async (values) => {
       try {
+        formik.setSubmitting(true);
         const res = await API.post("/auth/login", values);
         const token = res.data.token;
         localStorage.setItem("x-auth-token", token);
+        formik.setSubmitting(false);
       } catch (err) {
         setError(err.response.data.error);
+        formik.setSubmitting(false);
       }
     },
   });
@@ -112,7 +115,113 @@ export default function Home() {
                     onClick={formik.submitForm}
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                   >
-                    Get started <ArrowRight className="ml-2" size={16} />
+                    {formik.isSubmitting ? (
+                      <span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 24 24"
+                        >
+                          <rect
+                            width="6"
+                            height="14"
+                            x="1"
+                            y="4"
+                            fill="currentColor"
+                          >
+                            <animate
+                              id="svgSpinnersBarsScaleFade0"
+                              fill="freeze"
+                              attributeName="y"
+                              begin="0;svgSpinnersBarsScaleFade1.end-0.25s"
+                              dur="0.75s"
+                              values="1;5"
+                            />
+                            <animate
+                              fill="freeze"
+                              attributeName="height"
+                              begin="0;svgSpinnersBarsScaleFade1.end-0.25s"
+                              dur="0.75s"
+                              values="22;14"
+                            />
+                            <animate
+                              fill="freeze"
+                              attributeName="opacity"
+                              begin="0;svgSpinnersBarsScaleFade1.end-0.25s"
+                              dur="0.75s"
+                              values="1;0.2"
+                            />
+                          </rect>
+                          <rect
+                            width="6"
+                            height="14"
+                            x="9"
+                            y="4"
+                            fill="currentColor"
+                            opacity="0.4"
+                          >
+                            <animate
+                              fill="freeze"
+                              attributeName="y"
+                              begin="svgSpinnersBarsScaleFade0.begin+0.15s"
+                              dur="0.75s"
+                              values="1;5"
+                            />
+                            <animate
+                              fill="freeze"
+                              attributeName="height"
+                              begin="svgSpinnersBarsScaleFade0.begin+0.15s"
+                              dur="0.75s"
+                              values="22;14"
+                            />
+                            <animate
+                              fill="freeze"
+                              attributeName="opacity"
+                              begin="svgSpinnersBarsScaleFade0.begin+0.15s"
+                              dur="0.75s"
+                              values="1;0.2"
+                            />
+                          </rect>
+                          <rect
+                            width="6"
+                            height="14"
+                            x="17"
+                            y="4"
+                            fill="currentColor"
+                            opacity="0.3"
+                          >
+                            <animate
+                              id="svgSpinnersBarsScaleFade1"
+                              fill="freeze"
+                              attributeName="y"
+                              begin="svgSpinnersBarsScaleFade0.begin+0.3s"
+                              dur="0.75s"
+                              values="1;5"
+                            />
+                            <animate
+                              fill="freeze"
+                              attributeName="height"
+                              begin="svgSpinnersBarsScaleFade0.begin+0.3s"
+                              dur="0.75s"
+                              values="22;14"
+                            />
+                            <animate
+                              fill="freeze"
+                              attributeName="opacity"
+                              begin="svgSpinnersBarsScaleFade0.begin+0.3s"
+                              dur="0.75s"
+                              values="1;0.2"
+                            />
+                          </rect>
+                        </svg>
+                      </span>
+                    ) : (
+                      <>
+                        <span> Get started </span>{" "}
+                        <ArrowRight className="ml-2" size={16} />{" "}
+                      </>
+                    )}
                   </button>
                 </div>
               </div>

@@ -6,6 +6,7 @@ import * as Yup from "yup";
 const NewCarForm = () => {
   const [previewImages, setPreviewImages] = useState([]);
   const [ImageFiles, setImageFiles] = useState([]);
+  const [successMessage, setSuccessMessage] = useState(undefined);
   const initialValues = {
     carModel: "",
     price: "",
@@ -62,12 +63,21 @@ const NewCarForm = () => {
 
   return (
     <div className="container mx-auto">
+      <h1 className="text-xl font-bold mb-4 text-center my-3 py-2 bg-black text-white rounded">
+        Add Car
+      </h1>
+      {successMessage && (
+        <p className="text-sm max-w-xs mx-auto font-bold mb-4 text-center my-3 py-2 bg-green-400 text-green-900 rounded">
+          {successMessage}
+        </p>
+      )}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           console.log(values);
           try {
+            setSubmitting(true);
             const formData = new FormData();
             formData.append("carModel", values.carModel);
             formData.append("price", values.price);
@@ -76,18 +86,26 @@ const NewCarForm = () => {
             values.pictures.forEach((file) => {
               formData.append("pictures", file);
             });
-
+            const token = localStorage.getItem("x-auth-token");
             const res = await API.post("/car", formData, {
               headers: {
                 "Content-Type": "multipart/form-data",
+
+                "x-auth-token": token || "",
               },
             });
+            setSuccessMessage("Car Has been Added");
+            setTimeout(() => {
+              setSuccessMessage(undefined);
+            }, 2000);
             resetForm();
             setImageFiles([]);
             setPreviewImages([]);
+            setSubmitting(false);
             console.log(res);
           } catch (error) {
             alert(JSON.stringify(error.response.data.message));
+            setSubmitting(false);
           }
         }}
       >
@@ -201,10 +219,113 @@ const NewCarForm = () => {
             <div>
               <button
                 type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className={` bg-black hover:bg-slate-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
                 disabled={isSubmitting}
               >
-                Submit
+                {isSubmitting ? (
+                  <span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1em"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                    >
+                      <rect
+                        width="6"
+                        height="14"
+                        x="1"
+                        y="4"
+                        fill="currentColor"
+                      >
+                        <animate
+                          id="svgSpinnersBarsScaleFade0"
+                          fill="freeze"
+                          attributeName="y"
+                          begin="0;svgSpinnersBarsScaleFade1.end-0.25s"
+                          dur="0.75s"
+                          values="1;5"
+                        />
+                        <animate
+                          fill="freeze"
+                          attributeName="height"
+                          begin="0;svgSpinnersBarsScaleFade1.end-0.25s"
+                          dur="0.75s"
+                          values="22;14"
+                        />
+                        <animate
+                          fill="freeze"
+                          attributeName="opacity"
+                          begin="0;svgSpinnersBarsScaleFade1.end-0.25s"
+                          dur="0.75s"
+                          values="1;0.2"
+                        />
+                      </rect>
+                      <rect
+                        width="6"
+                        height="14"
+                        x="9"
+                        y="4"
+                        fill="currentColor"
+                        opacity="0.4"
+                      >
+                        <animate
+                          fill="freeze"
+                          attributeName="y"
+                          begin="svgSpinnersBarsScaleFade0.begin+0.15s"
+                          dur="0.75s"
+                          values="1;5"
+                        />
+                        <animate
+                          fill="freeze"
+                          attributeName="height"
+                          begin="svgSpinnersBarsScaleFade0.begin+0.15s"
+                          dur="0.75s"
+                          values="22;14"
+                        />
+                        <animate
+                          fill="freeze"
+                          attributeName="opacity"
+                          begin="svgSpinnersBarsScaleFade0.begin+0.15s"
+                          dur="0.75s"
+                          values="1;0.2"
+                        />
+                      </rect>
+                      <rect
+                        width="6"
+                        height="14"
+                        x="17"
+                        y="4"
+                        fill="currentColor"
+                        opacity="0.3"
+                      >
+                        <animate
+                          id="svgSpinnersBarsScaleFade1"
+                          fill="freeze"
+                          attributeName="y"
+                          begin="svgSpinnersBarsScaleFade0.begin+0.3s"
+                          dur="0.75s"
+                          values="1;5"
+                        />
+                        <animate
+                          fill="freeze"
+                          attributeName="height"
+                          begin="svgSpinnersBarsScaleFade0.begin+0.3s"
+                          dur="0.75s"
+                          values="22;14"
+                        />
+                        <animate
+                          fill="freeze"
+                          attributeName="opacity"
+                          begin="svgSpinnersBarsScaleFade0.begin+0.3s"
+                          dur="0.75s"
+                          values="1;0.2"
+                        />
+                      </rect>
+                    </svg>
+                  </span>
+                ) : (
+                  "Submit"
+                )}
               </button>
             </div>
           </Form>
