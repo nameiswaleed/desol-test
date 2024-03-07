@@ -55,7 +55,7 @@ const getAllUsers = async () => {
  */
 const getUserByEmail = async (email) => {
   try {
-    const user = await Users.findOne({ email }, { password: 0 });
+    const user = await Users.findOne({ email });
     return user;
   } catch (error) {
     console.log("[ERR IN GET USER BY EMAIL SERVICE]", error);

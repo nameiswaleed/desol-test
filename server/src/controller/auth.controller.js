@@ -50,6 +50,7 @@ const loginHandler = async (email, password) => {
     if (!user) {
       throw new Error("User not found");
     } else {
+      console.log(email, password);
       const isPasswordMatch = await cryptoServices.comparePassword(
         password,
         user.password

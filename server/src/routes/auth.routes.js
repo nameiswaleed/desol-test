@@ -11,9 +11,10 @@ authRouter.post("/signup", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-authRouter.get("/login", async (req, res) => {
+authRouter.post("/login", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
+
     const token = await loginHandler(email, password);
     res.status(200).json({
       status: "success",
