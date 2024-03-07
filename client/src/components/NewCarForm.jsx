@@ -87,7 +87,7 @@ const NewCarForm = () => {
             setPreviewImages([]);
             console.log(res);
           } catch (error) {
-            alert(error.response.data.error);
+            alert(JSON.stringify(error.response.data.message));
           }
         }}
       >
